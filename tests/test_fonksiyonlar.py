@@ -1,6 +1,7 @@
 # testler
 
-from uzay_oyunu.oyun import envanter_metni, hedef_menusu
+import pytest
+from uzay_oyunu.oyun import envanter_metni, hedef_menusu, galaksi_kur
 
 
 # envanter testleri
@@ -31,3 +32,19 @@ def test_menu_numaralama():
     sonuc = hedef_menusu(["a", "b", "c"])
     assert "[1] a" in sonuc
     assert "[3] c" in sonuc
+
+
+# galaksi testleri
+
+def test_galaksi_konum_yakit():
+    g = galaksi_kur(["dünya", "mars"], {"dünya": ["mars"], "mars": []}, "dünya", yakit=100)
+    assert g["konum"] == "dünya"
+    assert g["yakit"] == 100
+
+def test_galaksi_yakit_varsayilan():
+    g = galaksi_kur(["mars"], {"mars": []}, "mars")
+    assert g["yakit"] == 50
+
+def test_galaksi_hata():
+    with pytest.raises(ValueError):
+        galaksi_kur(["mars"], {}, "plüton")

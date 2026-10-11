@@ -1,6 +1,9 @@
 # uzay oyunu
 # oguz umut senel
 
+import json
+import os
+
 
 def envanter_metni(credits: bool, engines: bool, copilot: bool) -> str:
     """esyalar varsa sende metnini yoksa bos string dondurur"""
@@ -25,42 +28,58 @@ def hedef_menusu(hedefler: list[str]) -> str:
     return metin
 
 
+def galaksi_kur(gezegenler: list[str], baglantilar: dict,
+                baslangic: str, **kwargs) -> dict:
+    """galaksi sozlugu olusturur baslangic yoksa hata verir"""
+    if baslangic not in gezegenler:
+        raise ValueError(f"{baslangic} listede yok")
+
+    # yakit yoksa 50 al
+    yakit = kwargs.get("yakit", 50)
+
+    galaksi = {
+        "gezegenler": gezegenler,
+        "baglantilar": baglantilar,
+        "konum": baslangic,
+        "yakit": yakit
+    }
+    return galaksi
+
+
+def galaksi_yukle() -> dict:
+    """json dosyasindan galaksiyi okur"""
+    yol = os.path.join(os.path.dirname(__file__), "galaksi.json")
+    with open(yol, "r", encoding="utf-8") as f:
+        veri = json.load(f)
+    return galaksi_kur(**veri)
+
+
 def travel():
     """ana oyun dongusu"""
-    konum = "dünya"
-    yakit = 100
+    galaksi = galaksi_yukle()
+
     credits = False
     engines = False
     copilot = False
 
     print("=== UZAY MACERASI ===")
-    print("Konum:", konum)
-    print("Yakıt:", yakit)
+    print("Konum:", galaksi["konum"])
+    print("Yakıt:", galaksi["yakit"])
     print()
 
-    while yakit > 0:
+    while galaksi["yakit"] > 0:
         envanter = envanter_metni(credits, engines, copilot)
         if envanter:
             print(envanter)
 
-        if konum == "dünya":
-            destinations = ["centauri", "sirius"]
-        elif konum == "centauri":
-            destinations = ["dünya", "sirius", "orion"]
-        elif konum == "sirius":
-            destinations = ["dünya", "centauri", "orion", "kara_delik"]
-        elif konum == "orion":
-            destinations = ["centauri", "sirius"]
-        elif konum == "kara_delik":
-            destinations = ["sirius"]
-        else:
-            destinations = []
+        konum = galaksi["konum"]
+        hedefler = galaksi["baglantilar"].get(konum, [])
 
-        if len(destinations) == 0:
+        if len(hedefler) == 0:
             print("Buradan gidecek yer yok!")
             break
 
-        print(hedef_menusu(destinations))
+        print(hedef_menusu(hedefler))
 
         try:
             secim = input("Seçimin (q=çık): ")
@@ -68,14 +87,14 @@ def travel():
                 break
 
             idx = int(secim) - 1
-            if idx >= 0 and idx < len(destinations):
-                yeni_yer = destinations[idx]
-                konum = yeni_yer
-                yakit -= 10
+            if idx >= 0 and idx < len(hedefler):
+                yeni_yer = hedefler[idx]
+                galaksi["konum"] = yeni_yer
+                galaksi["yakit"] = galaksi["yakit"] - 10
 
                 print()
                 print(yeni_yer, "gezegenine vardın!")
-                print("Kalan yakıt:", yakit)
+                print("Kalan yakıt:", galaksi["yakit"])
 
                 if yeni_yer == "centauri" and not credits:
                     credits = True
@@ -96,7 +115,7 @@ def travel():
         except ValueError:
             print("Sayı gir!\n")
 
-    if yakit <= 0:
+    if galaksi["yakit"] <= 0:
         print("Yakıt bitti!")
 
 
