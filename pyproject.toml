@@ -1,0 +1,15 @@
+[project]
+name = "uzay-oyunu"
+version = "0.1.0"
+description = "Uzay oyunu - Hafta 3 lab ödevi"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = ["pytest"]
