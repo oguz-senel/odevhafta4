@@ -3,6 +3,7 @@
 
 import json
 import os
+from uzay_oyunu.araclar import hamle_sayaci
 
 
 def envanter_metni(credits: bool, engines: bool, copilot: bool) -> str:
@@ -57,10 +58,12 @@ def galaksi_yukle() -> dict:
 def travel():
     """ana oyun dongusu"""
     galaksi = galaksi_yukle()
+    sayac = hamle_sayaci()
 
     credits = False
     engines = False
     copilot = False
+    hamle = 0
 
     print("=== UZAY MACERASI ===")
     print("Konum:", galaksi["konum"])
@@ -91,6 +94,7 @@ def travel():
                 yeni_yer = hedefler[idx]
                 galaksi["konum"] = yeni_yer
                 galaksi["yakit"] = galaksi["yakit"] - 10
+                hamle = sayac()
 
                 print()
                 print(yeni_yer, "gezegenine vardın!")
@@ -107,6 +111,7 @@ def travel():
                     print("Güçlü motorlar taktın!")
                 elif yeni_yer == "kara_delik":
                     print("Kara deliğe ulaştın! Kazandın!")
+                    print(f"Oyunu {hamle} hamlede bitirdin!")
                     return
 
                 print()
@@ -117,6 +122,7 @@ def travel():
 
     if galaksi["yakit"] <= 0:
         print("Yakıt bitti!")
+    print(f"Oyunu {hamle} hamlede bitirdin!")
 
 
 if __name__ == "__main__":

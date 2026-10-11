@@ -2,6 +2,7 @@
 
 import pytest
 from uzay_oyunu.oyun import envanter_metni, hedef_menusu, galaksi_kur
+from uzay_oyunu.araclar import hamle_sayaci, en_bagli_gezegenler
 
 
 # envanter testleri
@@ -48,3 +49,36 @@ def test_galaksi_yakit_varsayilan():
 def test_galaksi_hata():
     with pytest.raises(ValueError):
         galaksi_kur(["mars"], {}, "plüton")
+
+
+# sayac testleri
+
+def test_sayac_artis():
+    s = hamle_sayaci()
+    assert s() == 1
+    assert s() == 2
+    assert s() == 3
+
+def test_sayac_bagimsiz():
+    s1 = hamle_sayaci()
+    s2 = hamle_sayaci()
+    s1()
+    s1()
+    assert s2() == 1
+
+
+# en bagli gezegenler testi
+
+def test_en_bagli_siralama():
+    g = galaksi_kur(
+        ["dünya", "centauri", "sirius", "orion", "kara_delik"],
+        {
+            "dünya": ["centauri", "sirius"],
+            "centauri": ["dünya", "sirius", "orion"],
+            "sirius": ["dünya", "centauri", "orion", "kara_delik"],
+            "orion": ["centauri", "sirius"],
+            "kara_delik": ["sirius"],
+        },
+        "dünya", yakit=100
+    )
+    assert en_bagli_gezegenler(g) == ["sirius", "centauri", "dünya", "orion", "kara_delik"]
