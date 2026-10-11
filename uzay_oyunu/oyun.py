@@ -2,6 +2,29 @@
 # oguz umut senel
 
 
+def envanter_metni(credits: bool, engines: bool, copilot: bool) -> str:
+    """esyalar varsa sende metnini yoksa bos string dondurur"""
+    esyalar = []
+    if credits:
+        esyalar.append("bol kredi")
+    if engines:
+        esyalar.append("güçlü motorlar")
+    if copilot:
+        esyalar.append("yetenekli bir pilot")
+
+    if len(esyalar) > 0:
+        return "Sende: " + ", ".join(esyalar)
+    return ""
+
+
+def hedef_menusu(hedefler: list[str]) -> str:
+    """numarali hedef listesi dondurur"""
+    metin = "Nereye gitmek istersin?"
+    for i in range(len(hedefler)):
+        metin += "\n[" + str(i + 1) + "] " + hedefler[i]
+    return metin
+
+
 def travel():
     """ana oyun dongusu"""
     konum = "dünya"
@@ -16,15 +39,9 @@ def travel():
     print()
 
     while yakit > 0:
-        esyalar = []
-        if credits:
-            esyalar.append("bol kredi")
-        if engines:
-            esyalar.append("güçlü motorlar")
-        if copilot:
-            esyalar.append("yetenekli bir pilot")
-        if len(esyalar) > 0:
-            print("Sende: " + ", ".join(esyalar))
+        envanter = envanter_metni(credits, engines, copilot)
+        if envanter:
+            print(envanter)
 
         if konum == "dünya":
             destinations = ["centauri", "sirius"]
@@ -43,9 +60,7 @@ def travel():
             print("Buradan gidecek yer yok!")
             break
 
-        print("Nereye gitmek istersin?")
-        for i in range(len(destinations)):
-            print(f"[{i + 1}] {destinations[i]}")
+        print(hedef_menusu(destinations))
 
         try:
             secim = input("Seçimin (q=çık): ")
