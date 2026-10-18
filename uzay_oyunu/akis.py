@@ -15,3 +15,14 @@ def fibonacci() -> Generator[int, None, None]:
         gecici = a + b
         a = b
         b = gecici
+
+
+def yakit_gostergesi(yakit: int, tuketim: int) -> Generator[int, None, None]:
+    """her next cagrisinda yakiti tuketim kadar azaltip kalani verir sifirda durur"""
+    kalan = yakit
+    while kalan > 0:
+        kalan = kalan - tuketim
+        if kalan < 0:
+            kalan = 0
+        yield kalan
+

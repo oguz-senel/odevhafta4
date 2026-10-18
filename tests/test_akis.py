@@ -35,3 +35,33 @@ def test_fibonacci_tek_kullanimlik():
     assert ilk == [0, 1, 1, 2, 3]
     assert ikinci == [5, 8, 13, 21, 34]
     assert ilk != ikinci
+
+
+# gorev 2 testleri
+def test_yakit_gostergesi_ornek():
+    # dokumandaki ornek 100 yakit 30 tuketim
+    from uzay_oyunu.akis import yakit_gostergesi
+    assert list(yakit_gostergesi(100, 30)) == [70, 40, 10, 0]
+
+
+def test_yakit_gostergesi_stop_iteration():
+    # yakit sifir olunca bir sonraki cagri stopiteration firlatmali
+    from uzay_oyunu.akis import yakit_gostergesi
+    g = yakit_gostergesi(20, 10)
+    assert next(g) == 10
+    assert next(g) == 0
+    with pytest.raises(StopIteration):
+        next(g)
+
+
+def test_yakit_gostergesi_bastansifir():
+    # bastan 0 olan yakit icin bos liste uretmeli
+    from uzay_oyunu.akis import yakit_gostergesi
+    assert list(yakit_gostergesi(0, 10)) == []
+
+
+def test_yakit_gostergesi_fazla_tuketim():
+    # tuketim yakittan coksa 0 uretip durmali
+    from uzay_oyunu.akis import yakit_gostergesi
+    assert list(yakit_gostergesi(15, 25)) == [0]
+

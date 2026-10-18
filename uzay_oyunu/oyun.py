@@ -57,8 +57,10 @@ def galaksi_yukle() -> dict:
 
 def travel():
     """ana oyun dongusu"""
+    from uzay_oyunu.akis import yakit_gostergesi
     galaksi = galaksi_yukle()
     sayac = hamle_sayaci()
+    gosterge = yakit_gostergesi(galaksi["yakit"], 5)
 
     credits = False
     engines = False
@@ -93,7 +95,11 @@ def travel():
             if idx >= 0 and idx < len(hedefler):
                 yeni_yer = hedefler[idx]
                 galaksi["konum"] = yeni_yer
-                galaksi["yakit"] = galaksi["yakit"] - 10
+                try:
+                    galaksi["yakit"] = next(gosterge)
+                except StopIteration:
+                    print("Yakıtın bitti, uzayda sürükleniyorsun…")
+                    break
                 hamle = sayac()
 
                 print()
