@@ -76,4 +76,44 @@ def rota_sayaci(baglantilar: dict):
     return rota_sayisi
 
 
+# bonus
+def zamanlayici(aralik: float) -> Generator[bool, None, None]:
+    """aralik suresi dolunca true dolmadiysa false uretir"""
+    import time
+
+    hedef = time.perf_counter() + aralik
+    while True:
+        simdi = time.perf_counter()
+        if simdi >= hedef:
+            hedef = hedef + aralik
+            yield True
+        else:
+            yield False
+
+
+def tik_tak_programi(toplam_sure: float = 10.0, yazdir: bool = True) -> list[tuple[float, str]]:
+    """10 saniye boyunca her 2 saniyede tik 5 saniyede tak yazar"""
+    import time
+
+    tik = zamanlayici(2.0)
+    tak = zamanlayici(5.0)
+
+    olaylar = []
+    baslangic = time.perf_counter()
+
+    while (time.perf_counter() - baslangic) <= toplam_sure:
+        gecen = time.perf_counter() - baslangic
+        if next(tik):
+            olaylar.append((round(gecen, 2), "tik"))
+            if yazdir:
+                print("tik")
+        if next(tak):
+            olaylar.append((round(gecen, 2), "tak"))
+            if yazdir:
+                print("tak")
+
+    return olaylar
+
+
+
 

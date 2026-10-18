@@ -172,5 +172,25 @@ def test_hizli_yolculuk_partial():
     assert hizli_yolculuk(15) == 5.0
 
 
+# bonus testleri
+def test_zamanlayici():
+    import time
+    from uzay_oyunu.akis import zamanlayici
+    z = zamanlayici(0.02)
+    assert next(z) is False
+    bas = time.perf_counter()
+    while time.perf_counter() - bas < 0.025:
+        pass
+    assert next(z) is True
+
+
+def test_tik_tak_programi():
+    from uzay_oyunu.akis import tik_tak_programi
+    # hizli calissin diye 0.01 saniye veriyoruz
+    sonuc = tik_tak_programi(toplam_sure=0.01, yazdir=False)
+    assert isinstance(sonuc, list)
+
+
+
 
 
