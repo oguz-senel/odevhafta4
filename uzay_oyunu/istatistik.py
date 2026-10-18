@@ -1,16 +1,16 @@
-# oguz umut senel
-# 20253004027
+# oguz umut senel - 20253004027
 # istatistik modulu - map filter reduce ve partial
 
 from functools import reduce, partial
 
-# bence liste uretecleri cok daha okunakli map ve filter ile ugrasirken lambda yazmak gerekiyor ve sonra list ile cevirmek gerekiyor
-# reduce da ayni sekilde anlasilmasi zor kaliyor sum fonksiyonu hem cok kisa hem de ne yaptigi kabak gibi ortada o yuzden liste ureteci ve sum daha iyi bence
+# hocanin okunaklilik sorusuna yorumum:
+# bence kesinlikle liste uretecleri cok daha okunakli cunku map ve filter yazarken araya lambda giriyor bide en disa list() yazmak lazim parantezler cok karisiyor
+# reduce da ayni sekilde reduce(lambda t, k: t + len(k), ...) yazmaktansa sum() fonksiyonu kullanmak bin kat daha temiz ve anlasilir o yuzden python tarzi liste ureteci ve sum daha iyi bence
 
 
 # soru 1 gezegen adlarinin buyuk harfli listesi
 def buyuk_harfli_gezegenler_map(galaksi: dict) -> list[str]:
-    """map kullanarak gezegenleri buyuk harfe cevirir"""
+    """map ile gezegenleri buyuk harfe cevirir"""
     return list(map(lambda g: g.upper(), galaksi["gezegenler"]))
 
 
@@ -20,7 +20,7 @@ def buyuk_harfli_gezegenler_comp(galaksi: dict) -> list[str]:
 
 
 def buyuk_harfli_gezegenler(galaksi: dict) -> list[str]:
-    """buyuk harfli gezegenler listesini dondurur"""
+    """buyuk harf listesi dondurur"""
     return buyuk_harfli_gezegenler_comp(galaksi)
 
 
@@ -28,6 +28,7 @@ def buyuk_harfli_gezegenler(galaksi: dict) -> list[str]:
 def cok_baglantili_gezegenler_filter(galaksi: dict, esik: int = 2) -> list[str]:
     """filter ile en az esik kadar baglantisi olanlari secer"""
     bag = galaksi["baglantilar"]
+    # lambda ile komsularina bakiyoruz
     return list(filter(lambda g: len(bag.get(g, [])) >= esik, galaksi["gezegenler"]))
 
 
@@ -66,4 +67,5 @@ def yolculuk(mesafe: float, hiz: float = 1.0) -> float:
     return mesafe / hiz
 
 
+# partial ile hizi 3 yaptik
 hizli_yolculuk = partial(yolculuk, hiz=3.0)

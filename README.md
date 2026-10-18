@@ -1,37 +1,39 @@
-# uzay oyunu hafta 4 odevi
+# uzay oyunu hafta 4 lab odevi
 
 ogrenci: Oguz Umut Senel
 ogrenci no: 20253004027
 ders: ileri python programlama
 github: https://github.com/oguz-senel/odevhafta4
 
-bu hafta projeye uretecler boru hatti ve onbellek ekledik
+bu hafta uzay projesine uretecler, veri boru hatti ve onbellek ekledik
 
 
 ## gorev 4 onbellek olcumleri
 
-adim=20 icin 10 baglantili ornek haritada olcum yaptim sonuclar soyle cikti:
+adim=20 icin 10 baglantili ornek galakside olcum yaptim:
 
 - onbelleksiz sure: 1.602125 saniye
 - onbellekli sure: 0.000080 saniye
 - cache_info ciktisi: CacheInfo(hits=47, misses=51, maxsize=None, currsize=51)
 
-onbellek kullaninca ayni yerleri tekrar tekrar hesaplamadigi icin inanilmaz hizlandi normalde surekli dallanip ayni seyleri hesapliyordu onbellek sayesinde tek seferde cozdu baya fark etti yani
+onbelleksiz fonksiyonda adim=20 yapinca surekli ayni dugumleri ve dallari tekrar tekrar hesapladigi icin yaklasik 1.6 saniye surdu bilgisayari bekletti biraz ama @lru_cache ekleyince onceden hesaplanan rota sayilarini hafizada tuttugu icin 0.00008 saniyede bitti yani neredeyse aninda hesapladi asiri hizlandi
 
 
-## gorev 5 okunaklilik hakkinda dusuncem
+## gorev 5 okunaklilik karsilastirmasi
 
-bence kesinlikle liste uretecleri cok daha okunakli map ve filter kullaninca hem lambda yazmak zorunda kaliyoruz hem de sonra list() ile sarmak gerekiyor kod cok karisiyor reduce zaten ayri dert sum() fonksiyonu cok daha temiz ve anlasilir o yuzden python da liste ureteci bence cok daha guzel
-
-
-## bonus mesgul bekleme ve time sleep farki
-
-zamanlayici fonksiyonunda while True icinde surekli time.perf_counter() ile saati kontrol ettigimiz icin buna mesgul bekleme (busy waiting) deniyor islemci hic durmadan surekli calisiyor ve bos yere yuzde 100 cpu harcayip bilgisayari yoruyor
-
-time.sleep ile farki ise su:
-time.sleep dedigimiz zaman isletim sistemi programi uyutuyor islemci o sirada baska programlarla ilgilenebiliyor hic cpu harcamiyor sure bitince tekrar uyandiriyor mesgul beklemede ise islemciyi hic birakmiyoruz surekli kontrol edip yoruyoruz
+bence kesinlikle liste uretecleri (list comprehension) ve sum() fonksiyonu cok daha okunakli
+cunku map ve filter yazarken mecburen lambda kullanmak gerekiyor sonra bir de en disa list() eklemek gerekiyor parantezler birbirine giriyor kod kalabaligi oluyor
+reduce fonksiyonu da benzer sekilde iki parametreli lambda ile kafayi karistiriyor onun yerine sum() yazinca ne yaptigi tek bakista anlasiliyor o yuzden python tarzi liste uretecleri cok daha temiz
 
 
-## testleri calistirma
+## bonus zamanlayici mesgul bekleme ve time.sleep farki
+
+zamanlayici fonksiyonunda bir while True dongusu icinde time.perf_counter() ile hedeflenen saniyeyi surekli kontrol ediyoruz bu yonteme mesgul bekleme (busy waiting) deniyor cunku islemci bu donguden hic cikmiyor bos yere yuzde 100 calisip bilgisayari yoruyor ve elektrik harciyor
+
+time.sleep ile temel farki su:
+time.sleep(2) gibi bir komut verdigimizde isletim sistemi o sure boyunca python programini uyku moduna aliyor yani calismasini durduruyor ve islemci o sirada baska isleri yapabiliyor boylece cpu bosuna calismamis oluyor sure bitince isletim sistemi tekrar uyandiriyor ama mesgul beklemede islemciyi hic serbest birakmiyoruz surekli kontrol edip yoruyoruz
+
+
+## testler
 
 uv run pytest

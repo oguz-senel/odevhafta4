@@ -1,6 +1,6 @@
 # test_akis.py
-# oguz umut senel
-# 20253004027
+# oguz umut senel - 20253004027
+# hafta 4 lab testleri
 
 import itertools
 import pytest
@@ -9,26 +9,26 @@ from uzay_oyunu.akis import fibonacci
 
 # gorev 1 testleri
 def test_fibonacci_next():
-    # next ile ilk 3 elemani alma
+    # next ile ilk 3 degeri aliyoruz
     g = fibonacci()
     assert (next(g), next(g), next(g)) == (0, 1, 1)
 
 
 def test_fibonacci_islice():
-    # islice ile ilk 12 degeri alma
+    # islice ile ilk 12 degeri aliyoruz
     beklenen = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
     assert list(itertools.islice(fibonacci(), 12)) == beklenen
 
 
 def test_fibonacci_takewhile():
-    # takewhile ile 100den kucuk sayilar
+    # takewhile ile 100den kucuk olanlar
     beklenen = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
     sonuc = list(itertools.takewhile(lambda x: x < 100, fibonacci()))
     assert sonuc == beklenen
 
 
 def test_fibonacci_tek_kullanimlik():
-    # uretec tukenince ayni yerden devam eder yani tek kullanimliktir
+    # ayni uretecten ikinci kez cekince kaldigi yerden devam etmeli
     g = fibonacci()
     ilk = list(itertools.islice(g, 5))
     ikinci = list(itertools.islice(g, 5))
@@ -39,13 +39,13 @@ def test_fibonacci_tek_kullanimlik():
 
 # gorev 2 testleri
 def test_yakit_gostergesi_ornek():
-    # dokumandaki ornek 100 yakit 30 tuketim
+    # hocanin verdigi 100 yakit 30 tuketim ornegi
     from uzay_oyunu.akis import yakit_gostergesi
     assert list(yakit_gostergesi(100, 30)) == [70, 40, 10, 0]
 
 
 def test_yakit_gostergesi_stop_iteration():
-    # yakit sifir olunca bir sonraki cagri stopiteration firlatmali
+    # yakit sifir olunca tekrar next cagrilirsa stopiteration vermeli
     from uzay_oyunu.akis import yakit_gostergesi
     g = yakit_gostergesi(20, 10)
     assert next(g) == 10
@@ -55,27 +55,27 @@ def test_yakit_gostergesi_stop_iteration():
 
 
 def test_yakit_gostergesi_bastansifir():
-    # bastan 0 olan yakit icin bos liste uretmeli
+    # bastan 0 olan yakit direkt biter
     from uzay_oyunu.akis import yakit_gostergesi
     assert list(yakit_gostergesi(0, 10)) == []
 
 
 def test_yakit_gostergesi_fazla_tuketim():
-    # tuketim yakittan coksa 0 uretip durmali
+    # tuketim yakittan fazlaysa direkt 0 verip biter
     from uzay_oyunu.akis import yakit_gostergesi
     assert list(yakit_gostergesi(15, 25)) == [0]
 
 
 # gorev 3 testleri
 def test_boru_hatti_toplam_yakit():
-    # dokumandaki ornek 88 toplam yakit
+    # toplam yakit 88 cikmali
     from uzay_oyunu.akis import satirlari_oku, ayristir
     toplam = sum(y for _, _, y in ayristir(satirlari_oku("veri/seyir.txt")))
     assert toplam == 88
 
 
 def test_boru_hatti_uzun_yolculuklar():
-    # 10dan buyuk olanlar
+    # 10dan buyuk yakit harcayan hedefler
     from uzay_oyunu.akis import satirlari_oku, ayristir, uzun_yolculuklar
     kayitlar = ayristir(satirlari_oku("veri/seyir.txt"))
     sonuc = [h for _, h, _ in uzun_yolculuklar(kayitlar, 10)]
@@ -83,7 +83,7 @@ def test_boru_hatti_uzun_yolculuklar():
 
 
 def test_boru_hatti_tembellik():
-    # fonksiyonlarin liste degil generator dondurdugune bakalim
+    # listeye cevrilmedigini teyit ediyoruz generator nesnesi olmali
     import types
     from uzay_oyunu.akis import satirlari_oku, ayristir, uzun_yolculuklar
     g1 = satirlari_oku("veri/seyir.txt")
@@ -96,7 +96,7 @@ def test_boru_hatti_tembellik():
 
 # gorev 4 testleri
 def test_rota_sayaci_ornek_ciktilar():
-    # pdf teki 10 baglantili ornek harita
+    # pdf teki 10 baglantili galaksi degerleri
     from uzay_oyunu.akis import rota_sayaci
     harita = {
         "dünya": ["centauri", "sirius"],
@@ -112,7 +112,7 @@ def test_rota_sayaci_ornek_ciktilar():
 
 
 def test_rota_sayaci_onbellek_kontrol():
-    # galaksi json ile onbellek hits kontrolu
+    # galaksi.json ile cache_info kontrolu
     import json
     from uzay_oyunu.akis import rota_sayaci
     with open("uzay_oyunu/galaksi.json", "r", encoding="utf-8") as f:
@@ -128,6 +128,7 @@ def test_rota_sayaci_onbellek_kontrol():
 # gorev 5 testleri
 @pytest.fixture
 def ornek_galaksi():
+    # test icin ornek galaksi verisi
     return {
         "gezegenler": ["dünya", "centauri", "sirius", "orion", "kara_delik"],
         "baglantilar": {
@@ -141,7 +142,7 @@ def ornek_galaksi():
 
 
 def test_buyuk_harfli_gezegenler(ornek_galaksi):
-    # soru 1 buyuk harf listesi
+    # soru 1 buyuk harf testi hem map hem comp
     from uzay_oyunu.istatistik import buyuk_harfli_gezegenler_map, buyuk_harfli_gezegenler_comp
     beklenen = ["DÜNYA", "CENTAURI", "SIRIUS", "ORION", "KARA_DELIK"]
     assert buyuk_harfli_gezegenler_map(ornek_galaksi) == beklenen
@@ -149,7 +150,7 @@ def test_buyuk_harfli_gezegenler(ornek_galaksi):
 
 
 def test_cok_baglantili_gezegenler(ornek_galaksi):
-    # soru 2 en az iki baglanti
+    # soru 2 en az 2 baglanti testi
     from uzay_oyunu.istatistik import cok_baglantili_gezegenler_filter, cok_baglantili_gezegenler_comp
     beklenen = ["dünya", "centauri", "sirius", "orion"]
     assert cok_baglantili_gezegenler_filter(ornek_galaksi, 2) == beklenen
@@ -157,14 +158,14 @@ def test_cok_baglantili_gezegenler(ornek_galaksi):
 
 
 def test_toplam_baglanti_sayisi(ornek_galaksi):
-    # soru 3 toplam baglanti sayisi 10
+    # soru 3 toplam 10 baglanti testi
     from uzay_oyunu.istatistik import toplam_baglanti_sayisi_reduce, toplam_baglanti_sayisi_sum
     assert toplam_baglanti_sayisi_reduce(ornek_galaksi) == 10
     assert toplam_baglanti_sayisi_sum(ornek_galaksi) == 10
 
 
 def test_hizli_yolculuk_partial():
-    # partial ile hiz 3 sabitlenmeli
+    # partial hiz=3 testi
     from uzay_oyunu.istatistik import yolculuk, hizli_yolculuk
     assert hizli_yolculuk.func == yolculuk
     assert hizli_yolculuk.keywords == {"hiz": 3.0}
@@ -186,11 +187,6 @@ def test_zamanlayici():
 
 def test_tik_tak_programi():
     from uzay_oyunu.akis import tik_tak_programi
-    # hizli calissin diye 0.01 saniye veriyoruz
+    # calisiyor mu diye hizlica bakalim
     sonuc = tik_tak_programi(toplam_sure=0.01, yazdir=False)
     assert isinstance(sonuc, list)
-
-
-
-
-

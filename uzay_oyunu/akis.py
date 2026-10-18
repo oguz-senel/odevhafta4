@@ -1,12 +1,13 @@
 # oguz umut senel
 # 20253004027
-# akis modulu - uretecler ve fonksiyonlar
+# akis modulu - uretecler ve boru hatti
 
-from collections.abc import Generator
+from typing import Generator
 import itertools
 
 
-def fibonacci() -> Generator[int, None, None]:
+# gorev 1 sonsuz fibonacci
+def fibonacci() -> Generator:
     """sonsuz fibonacci sayisi ureten fonksiyon"""
     a = 0
     b = 1
@@ -17,47 +18,56 @@ def fibonacci() -> Generator[int, None, None]:
         b = gecici
 
 
-def yakit_gostergesi(yakit: int, tuketim: int) -> Generator[int, None, None]:
+# gorev 2 yakit gostergesi
+def yakit_gostergesi(yakit: int, tuketim: int) -> Generator:
     """her next cagrisinda yakiti tuketim kadar azaltip kalani verir sifirda durur"""
     kalan = yakit
     while kalan > 0:
         kalan = kalan - tuketim
+        # eksiye duserse sifir yapalim
         if kalan < 0:
             kalan = 0
         yield kalan
 
 
-def satirlari_oku(yol: str) -> Generator[str, None, None]:
+# gorev 3 seyir defteri boru hatti
+def satirlari_oku(yol: str) -> Generator:
     """dosyadaki bos ve diyezle baslayan yorum satirlarini atlar"""
     with open(yol, "r", encoding="utf-8") as f:
         for satir in f:
             temiz = satir.strip()
+            # eger satir bossa atla
             if len(temiz) == 0:
                 continue
+            # eger yorum satiriysa atla
             if temiz.startswith("#"):
                 continue
             yield temiz
 
 
-def ayristir(satirlar) -> Generator[tuple[str, str, int], None, None]:
+def ayristir(satirlar) -> Generator:
     """satirlari kaynak hedef ve yakit olarak ayirir demet dondurur"""
     for s in satirlar:
+        # orn dunya -> sirius 12
         parcalar = s.split("->")
         kaynak = parcalar[0].strip()
         sag = parcalar[1].strip()
+        # sirius ve 12 kismini ayiralim
         sag_kisim = sag.split()
         hedef = sag_kisim[0]
         yakit = int(sag_kisim[1])
         yield (kaynak, hedef, yakit)
 
 
-def uzun_yolculuklar(kayitlar, esik: int) -> Generator[tuple[str, str, int], None, None]:
+def uzun_yolculuklar(kayitlar, esik: int) -> Generator:
     """yakiti verilen esikten buyuk olanlari secer"""
     for kayit in kayitlar:
+        # kayit[2] yakit oluyor
         if kayit[2] > esik:
             yield kayit
 
 
+# gorev 4 onbellekli rota sayaci
 def rota_sayaci(baglantilar: dict):
     """onbellekli rota sayisi bulucu fonksiyon"""
     from functools import lru_cache
@@ -65,6 +75,7 @@ def rota_sayaci(baglantilar: dict):
     @lru_cache(maxsize=None)
     def rota_sayisi(gezegen: str, adim: int) -> int:
         """verilen gezegenden baslayip adim kadar giden farkli rotalarin sayisi"""
+        # hic adim kalmadiysa 1 rota bulunmustur
         if adim == 0:
             return 1
         toplam = 0
@@ -76,8 +87,8 @@ def rota_sayaci(baglantilar: dict):
     return rota_sayisi
 
 
-# bonus
-def zamanlayici(aralik: float) -> Generator[bool, None, None]:
+# bonus zamanlayici ve mesgul bekleme
+def zamanlayici(aralik: float) -> Generator:
     """aralik suresi dolunca true dolmadiysa false uretir"""
     import time
 
@@ -91,7 +102,7 @@ def zamanlayici(aralik: float) -> Generator[bool, None, None]:
             yield False
 
 
-def tik_tak_programi(toplam_sure: float = 10.0, yazdir: bool = True) -> list[tuple[float, str]]:
+def tik_tak_programi(toplam_sure: float = 10.0, yazdir: bool = True) -> list:
     """10 saniye boyunca her 2 saniyede tik 5 saniyede tak yazar"""
     import time
 
@@ -113,7 +124,3 @@ def tik_tak_programi(toplam_sure: float = 10.0, yazdir: bool = True) -> list[tup
                 print("tak")
 
     return olaylar
-
-
-
-
