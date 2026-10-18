@@ -94,3 +94,35 @@ def test_boru_hatti_tembellik():
     assert isinstance(g3, types.GeneratorType)
 
 
+# gorev 4 testleri
+def test_rota_sayaci_ornek_ciktilar():
+    # pdf teki 10 baglantili ornek harita
+    from uzay_oyunu.akis import rota_sayaci
+    harita = {
+        "dünya": ["centauri", "sirius"],
+        "centauri": ["dünya", "orion"],
+        "sirius": ["dünya", "orion", "kara_delik"],
+        "orion": ["centauri", "sirius"],
+        "kara_delik": ["sirius"]
+    }
+    say = rota_sayaci(harita)
+    assert say("dünya", 3) == 9
+    assert say("dünya", 10) == 2185
+    assert say("dünya", 40) == 16832258606399
+
+
+def test_rota_sayaci_onbellek_kontrol():
+    # galaksi json ile onbellek hits kontrolu
+    import json
+    from uzay_oyunu.akis import rota_sayaci
+    with open("uzay_oyunu/galaksi.json", "r", encoding="utf-8") as f:
+        veri = json.load(f)
+    say = rota_sayaci(veri["baglantilar"])
+    assert say("dünya", 0) == 1
+    deger = say("dünya", 3)
+    assert deger > 0
+    bilgi = say.cache_info()
+    assert bilgi.hits > 0
+
+
+

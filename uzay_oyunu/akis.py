@@ -58,3 +58,22 @@ def uzun_yolculuklar(kayitlar, esik: int) -> Generator[tuple[str, str, int], Non
             yield kayit
 
 
+def rota_sayaci(baglantilar: dict):
+    """onbellekli rota sayisi bulucu fonksiyon"""
+    from functools import lru_cache
+
+    @lru_cache(maxsize=None)
+    def rota_sayisi(gezegen: str, adim: int) -> int:
+        """verilen gezegenden baslayip adim kadar giden farkli rotalarin sayisi"""
+        if adim == 0:
+            return 1
+        toplam = 0
+        komsular = baglantilar.get(gezegen, [])
+        for k in komsular:
+            toplam = toplam + rota_sayisi(k, adim - 1)
+        return toplam
+
+    return rota_sayisi
+
+
+
