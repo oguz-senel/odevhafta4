@@ -65,3 +65,32 @@ def test_yakit_gostergesi_fazla_tuketim():
     from uzay_oyunu.akis import yakit_gostergesi
     assert list(yakit_gostergesi(15, 25)) == [0]
 
+
+# gorev 3 testleri
+def test_boru_hatti_toplam_yakit():
+    # dokumandaki ornek 88 toplam yakit
+    from uzay_oyunu.akis import satirlari_oku, ayristir
+    toplam = sum(y for _, _, y in ayristir(satirlari_oku("veri/seyir.txt")))
+    assert toplam == 88
+
+
+def test_boru_hatti_uzun_yolculuklar():
+    # 10dan buyuk olanlar
+    from uzay_oyunu.akis import satirlari_oku, ayristir, uzun_yolculuklar
+    kayitlar = ayristir(satirlari_oku("veri/seyir.txt"))
+    sonuc = [h for _, h, _ in uzun_yolculuklar(kayitlar, 10)]
+    assert sonuc == ['sirius', 'centauri', 'orion', 'kara_delik']
+
+
+def test_boru_hatti_tembellik():
+    # fonksiyonlarin liste degil generator dondurdugune bakalim
+    import types
+    from uzay_oyunu.akis import satirlari_oku, ayristir, uzun_yolculuklar
+    g1 = satirlari_oku("veri/seyir.txt")
+    assert isinstance(g1, types.GeneratorType)
+    g2 = ayristir(g1)
+    assert isinstance(g2, types.GeneratorType)
+    g3 = uzun_yolculuklar(g2, 10)
+    assert isinstance(g3, types.GeneratorType)
+
+
