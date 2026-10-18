@@ -125,4 +125,52 @@ def test_rota_sayaci_onbellek_kontrol():
     assert bilgi.hits > 0
 
 
+# gorev 5 testleri
+@pytest.fixture
+def ornek_galaksi():
+    return {
+        "gezegenler": ["dünya", "centauri", "sirius", "orion", "kara_delik"],
+        "baglantilar": {
+            "dünya": ["centauri", "sirius"],
+            "centauri": ["dünya", "orion"],
+            "sirius": ["dünya", "orion", "kara_delik"],
+            "orion": ["centauri", "sirius"],
+            "kara_delik": ["sirius"]
+        }
+    }
+
+
+def test_buyuk_harfli_gezegenler(ornek_galaksi):
+    # soru 1 buyuk harf listesi
+    from uzay_oyunu.istatistik import buyuk_harfli_gezegenler_map, buyuk_harfli_gezegenler_comp
+    beklenen = ["DÜNYA", "CENTAURI", "SIRIUS", "ORION", "KARA_DELIK"]
+    assert buyuk_harfli_gezegenler_map(ornek_galaksi) == beklenen
+    assert buyuk_harfli_gezegenler_comp(ornek_galaksi) == beklenen
+
+
+def test_cok_baglantili_gezegenler(ornek_galaksi):
+    # soru 2 en az iki baglanti
+    from uzay_oyunu.istatistik import cok_baglantili_gezegenler_filter, cok_baglantili_gezegenler_comp
+    beklenen = ["dünya", "centauri", "sirius", "orion"]
+    assert cok_baglantili_gezegenler_filter(ornek_galaksi, 2) == beklenen
+    assert cok_baglantili_gezegenler_comp(ornek_galaksi, 2) == beklenen
+
+
+def test_toplam_baglanti_sayisi(ornek_galaksi):
+    # soru 3 toplam baglanti sayisi 10
+    from uzay_oyunu.istatistik import toplam_baglanti_sayisi_reduce, toplam_baglanti_sayisi_sum
+    assert toplam_baglanti_sayisi_reduce(ornek_galaksi) == 10
+    assert toplam_baglanti_sayisi_sum(ornek_galaksi) == 10
+
+
+def test_hizli_yolculuk_partial():
+    # partial ile hiz 3 sabitlenmeli
+    from uzay_oyunu.istatistik import yolculuk, hizli_yolculuk
+    assert hizli_yolculuk.func == yolculuk
+    assert hizli_yolculuk.keywords == {"hiz": 3.0}
+    assert hizli_yolculuk(30) == 10.0
+    assert hizli_yolculuk(15) == 5.0
+
+
+
 
